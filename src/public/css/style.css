@@ -1,5 +1,4 @@
 body {
-  width: 960px;
   margin: auto;
   font-family: sans-serif;
 }
@@ -37,4 +36,10 @@ h1 {
 .landing-search {
   width: 50%;
   margin: 0 auto;
+}
+
+.worker-list-container {
+  margin: 0 auto;
+  margin-top: 25px;
+  width: 75%
 }
