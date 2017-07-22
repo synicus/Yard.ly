@@ -2,13 +2,10 @@ import React from 'react'
 import WorkerInfo from './workerInfo.jsx'
 import EquipmentServicesInfo from './equipmentServicesInfo.jsx'
 import RequestMaker from './requestMaker.jsx'
-<<<<<<< cbe685262ae055c3fb66754db71188a85a7690c8
 import { workersUpdateRoute, workersShowRoute, requestsWorkerRoute, requestsUserRoute, requestsFilterRoute } from '../../server/routes.js'
 import WorkerRequestList from './workerRequestList.jsx'
-=======
-import { workersUpdateRoute, workersShowRoute } from '../../server/routes.js'
 import axios from 'axios'
->>>>>>> checking
+
 
 class WorkerProfile extends React.Component {
 	constructor(props) {
@@ -319,16 +316,9 @@ class WorkerProfile extends React.Component {
 	componentDidMount() {
 		console.log('HELLO WORKD')
 		this.getWorker(this.props.location.pathname.slice(9))
-<<<<<<< cbe685262ae055c3fb66754db71188a85a7690c8
 		this.getWorkerRequests(this.props.location.pathname.slice(9))
 		this.getUserWorkerRequests(this.state.user._id, this.props.location.pathname.slice(9))
-=======
-		// fetch('/api/session', { credentails: 'same-origin'})
-		// 	.then((res) => res.json())
-		// 	.then((session) => {
-		// 		console.log(session, 'this is the session')
-		// 		this.setState({userId: session.user ? session.user._id : undefined})
-		// 	})
+
 		axios({
 			method: 'get',
 			url: '/api/session'
@@ -337,7 +327,6 @@ class WorkerProfile extends React.Component {
 			this.setState({ userId: res.data.user._id })
 		}).catch(console.log)
 		console.log(this.state, 'this is state')
->>>>>>> checking
 	}
 	render() {
 		return (
