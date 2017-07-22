@@ -2,7 +2,13 @@ import React from 'react'
 import WorkerInfo from './workerInfo.jsx'
 import EquipmentServicesInfo from './equipmentServicesInfo.jsx'
 import RequestMaker from './requestMaker.jsx'
-import { workersUpdateRoute, workersShowRoute, requestsWorkerRoute, requestsUserRoute, requestsFilterRoute } from '../../server/routes.js'
+import {
+	workersUpdateRoute,
+	workersShowRoute,
+	requestsWorkerRoute,
+	requestsUserRoute,
+	requestsFilterRoute,
+} from '../../server/routes.js'
 import WorkerRequestList from './workerRequestList.jsx'
 import axios from 'axios'
 
@@ -101,9 +107,10 @@ class WorkerProfile extends React.Component {
 		this.onServicesClick = this.onServicesClick.bind(this)
 		this.submitImage = this.submitImage.bind(this)
 		this.updateUser = this.updateUser.bind(this)
-		this.updateRequest = this.updateRequest.bind(this)
+		// this.updateRequest = this.updateRequest.bind(this)
 		this.getWorkerRequests = this.getWorkerRequests.bind(this)
 		this.getUserWorkerRequests = this.getUserWorkerRequests.bind(this)
+		this.onAcceptRequestClick = this.onAcceptRequestClick.bind(this)
 	}
 	submitEmail(e) {
 		e.preventDefault()
@@ -156,25 +163,7 @@ class WorkerProfile extends React.Component {
 			() => this.updateWorker(this.state.worker._id, this.state.worker),
 		)
 	}
-	updateRequest(requestId) {
-		var worker = this.state.worker
-		worker.requests = worker.requests.push(requestId)
-		this.setState(
-			{
-				worker: worker,
-			},
-			() => this.updateWorker(this.state.worker._id, this.state.worker),
-		)
-		var user = this.state.user
-		user.requests = user.requests.push(requestId)
-		this.setState(
-			{
-				user: user,
-			},
-			() => this.updateUser(this.state.user._id, this.state.user),
-		)
 
-	}
 	getWorker(id) {
 		fetch('/api'.concat(workersShowRoute(id)), {
 			headers: { 'Content-type': 'application/json' },
@@ -203,7 +192,6 @@ class WorkerProfile extends React.Component {
 			})
 			.then(() => {
 				console.log('~~~~~~state', this.state)
-
 			})
 	}
 
@@ -303,6 +291,9 @@ class WorkerProfile extends React.Component {
 	onServicesClick(e) {
 		this.changeService(e)
 	}
+	onAcceptRequestClick(id, request) {
+		this.acceptRequest(id, request)
+	}
 	changeService(type) {
 		var worker = this.state.worker
 		worker.services[type] = !worker.services[type]
@@ -318,6 +309,10 @@ class WorkerProfile extends React.Component {
 		this.getWorker(this.props.location.pathname.slice(9))
 		this.getWorkerRequests(this.props.location.pathname.slice(9))
 		this.getUserWorkerRequests(this.state.user._id, this.props.location.pathname.slice(9))
+		this.getUserWorkerRequests(
+			this.state.user._id,
+			this.props.location.pathname.slice(9),
+		)
 
 		axios({
 			method: 'get',
@@ -327,6 +322,7 @@ class WorkerProfile extends React.Component {
 			this.setState({ userId: res.data.user._id })
 		}).catch(console.log)
 		console.log(this.state, 'this is state')
+
 	}
 	render() {
 		return (
@@ -347,8 +343,17 @@ class WorkerProfile extends React.Component {
 					onServicesClick={this.onServicesClick}
 					userId={this.state.userId}
 				/>
-				<RequestMaker updateRequest={this.updateRequest} user={this.state.user} worker={this.state.worker} addresses={this.state.user.addresses} />
-				<WorkerRequestList worker={this.state.worker} requests={this.state.userWorkerRequests} />
+				<RequestMaker
+					updateRequest={this.updateRequest}
+					user={this.state.user}
+					worker={this.state.worker}
+					addresses={this.state.user.addresses}
+				/>
+				<WorkerRequestList
+					worker={this.state.worker}
+					onAcceptRequestClick={this.onAcceptRequestClick}
+					requests={this.state.userWorkerRequests}
+				/>
 			</div>
 		)
 	}
